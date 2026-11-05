@@ -15,7 +15,6 @@ sstf_code.zip
 *.pt
 *.ckpt
 project/*/checkpoints/*
-!project/*/checkpoints/.gitkeep
 !project/*/checkpoints/README.md
 
 # generated audio is shipped under project/Results only
