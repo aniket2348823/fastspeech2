@@ -56,21 +56,34 @@ re-running preprocessing.
 
 ## Checkpoints
 
-Each `checkpoints/` directory holds the final step, `40000.pth.tar` (350,875,787 bytes ≈ 335 MiB),
-which is above GitHub's 100 MB per-file limit. As the assignment permits, they are provided
-through an external download link / Git LFS rather than committed to the repository history.
-Verify a download with:
+The step-40 000 checkpoints are above GitHub's 100 MB per-file limit, so they are hosted on
+Google Drive — public links, no sign-in required, accessible throughout the evaluation.
 
-| Model | SHA-256 |
-|---|---|
-| English `40000.pth.tar` | `df91015427e4b69fd5e3f932d0391a525e3b008a07ecf14c5f3698731bb5bffd` |
-| Telugu `40000.pth.tar` | `cf66de638c0a7f1d88719d715a3a08626697f4c8d5b5377127810ed95f297327` |
+| Model | Size | Download |
+|---|---|---|
+| English `English_40000.pth.tar` | 348,774,539 B | https://drive.google.com/file/d/1uacreqMA7ErGy6GdGdLx3ZTChCwmoCde/view?usp=drive_link |
+| Telugu `Telugu_40000.pth.tar` | 350,875,787 B | https://drive.google.com/file/d/1jadSC2tEHPyiSpmlFVmbI859Lm4qZYvY/view?usp=drive_link |
 
-```bash
-sha256sum project/Telugu/checkpoints/40000.pth.tar
+Google Drive cannot virus-scan files this large, so clicking download shows a
+"can't scan for viruses" page with a **Download anyway** button — that is expected; the
+SHA-256 checksums below verify the download. After downloading, rename each file back to
+`40000.pth.tar` and place it in the matching folder:
+
+```
+project/English/checkpoints/40000.pth.tar
+project/Telugu/checkpoints/40000.pth.tar
 ```
 
-Each checkpoint stores `{"model": state_dict, "optimizer": state_dict}` only.
+Verify with:
+
+```bash
+sha256sum project/English/checkpoints/40000.pth.tar   # df91015427e4b69fd5e3f932d0391a525e3b008a07ecf14c5f3698731bb5bffd
+sha256sum project/Telugu/checkpoints/40000.pth.tar    # cf66de638c0a7f1d88719d715a3a08626697f4c8d5b5377127810ed95f297327
+```
+
+Each checkpoint stores `{"model": state_dict, "optimizer": state_dict}` only
+(embedding row counts: English `(361, 256)` = 360 symbols + 1 padding row; Telugu
+`(1045, 256)` = 1044 + 1).
 
 ## Reproducing
 
