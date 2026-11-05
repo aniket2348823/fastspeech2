@@ -32,11 +32,11 @@ harness that was used to produce it.
 |---|---|---|
 | Reference | ming024/FastSpeech2 `d4e79eb` | same |
 | Dataset | Svarah | IndicTTS Telugu |
-| Train / val audio | ≈4.0 h / ≈1.0 h (proportional, seed 1234) | 5.002 h / 1.000 h (hour-greedy, seed 1234) |
+| Train / val audio | target 5.0 h / 1.0 h, proportional rule, seed 1234; exact hours not retained | 5.002 h / 1.000 h (hour-greedy, seed 1234) |
 | Input units | ARPAbet phones, 360 symbols | grapheme clusters, 1044 symbols |
 | Training | 40 000 steps, 2×T4 | 40 000 steps, 5 h 50 m, 2×T4 |
-| Training loss (40k) | 0.9856 | 0.8352 |
-| Validation loss (40k) | 4.5144 | 4.5053 |
+| Training loss (40k) | ≈1.0 (Figure 3; log not retained) | 0.8352 |
+| Validation loss (40k) | ≈3.05 (Figure 4; log not retained) | 4.5053 |
 | Audio | 5 wavs, 3.48–9.18 s | 5 wavs, 3.77–11.00 s |
 | Variance plots | 5 × 3 | 5 × 3 |
 
@@ -44,9 +44,8 @@ Both models were trained **from scratch** — no fine-tuning from the published 
 so that the English/Telugu comparison in the report is apples-to-apples. The only pretrained
 component is the HiFi-GAN vocoder (LJSpeech generator for English, `universal` for Telugu).
 
-The loss curves show clean convergence and clear overfitting: validation loss is 4.6× (English) and
-5.4× (Telugu) the training loss at step 40 000, concentrated almost entirely in the pitch and energy
-heads. This is analysed in `project/Report/Technical_Report.pdf` §5.
+The loss curves show clean convergence and clear overfitting: Telugu validation loss is 5.39× the training loss at step 40 000 (exact, from the shipped Telugu log), concentrated almost
+entirely in the pitch and energy heads; the English figure shows the same pattern at smaller scale. This is analysed in `project/Report/Technical_Report.pdf` §5.
 
 ## Reference implementation
 

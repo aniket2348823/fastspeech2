@@ -1,6 +1,6 @@
 # Technical Report
 
-`Technical_Report.pdf` — 15 pages, generated from the shipped artefacts (loss logs, inference
+`Technical_Report.pdf` — 12 pages, generated from the shipped artefacts (loss logs, inference
 summaries and per-sentence CSVs), so every number in it can be traced back to a file in this
 repository.
 

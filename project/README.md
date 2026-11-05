@@ -30,7 +30,7 @@ project/
 │   │       └── {E1,E2a,E2b,E3,E4}.csv      the numbers the plots are drawn from
 │   └── Telugu/                             same layout, T1 T2a T2b T3 T4
 ├── Report/
-│   └── Technical_Report.pdf                15 pages
+│   └── Technical_Report.pdf                12 pages
 ├── patches/                                modified upstream files, per language
 ├── README.md                               this file
 └── requirements.txt
@@ -103,7 +103,7 @@ inference-only path.
 | Available | ≈5.0 h, 2 speakers | 8.74 h (8,576 utts), 2 speakers |
 | Filter | 0.4–20 s per utterance | 0.4–20 s → 2,236 dropped, 6,340 usable |
 | Split rule | proportional, `train_ratio: 0.8` | hour-greedy, 5 h / 1 h |
-| Used | ≈4.0 h train / ≈1.0 h val | 5.002 h train (1,907 utts) / 1.000 h val (373 utts) |
+| Used | target 5.0 h train / 1.0 h val (proportional rule, exact hours not retained) | 5.002 h train (1,907 utts) / 1.000 h val (373 utts) |
 | Unused | — | 2.74 h |
 
 Splits come from one seeded shuffle (`seed 1234`) followed by a single cut, so they are
@@ -113,9 +113,9 @@ disjoint by construction; `split_stats.json` records `"overlap": 0`.
 
 | | English | Telugu |
 |---|---|---|
-| Training loss (step 40k) | 0.9856 | 0.8352 |
-| Validation loss (step 40k) | 4.5144 | 4.5053 |
-| Validation / training ratio | 4.58× | 5.39× |
+| Training loss (step 40k) | ≈1.0 (from Figure 3; log not retained) | 0.8352 |
+| Validation loss (step 40k) | ≈3.05 (from Figure 4; log not retained) | 4.5053 |
+| Validation / training ratio | ≈2–3× (figure-read) | 5.39× |
 | Predicted speech, 5 sentences | 3.48–9.18 s | 3.77–11.00 s |
 | Units per sentence | 39–85 (phones) | 17–61 (graphemes) |
 

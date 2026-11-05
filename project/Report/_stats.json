@@ -50,22 +50,14 @@
   "Duration Loss": 3.89
  },
  "english_train_end": {
-  "total": 0.9856,
-  "mel": 0.3997,
-  "postnet": 0.398,
-  "pitch": 0.1656,
-  "energy": 0.0141,
-  "duration": 0.0082
+  "status": "NOT RETAINED",
+  "figure_read": "training total levels off near 1.0-1.3; see project/Results/English/training_loss.png"
  },
  "english_val_end": {
-  "total": 4.5144,
-  "mel": 1.2794,
-  "postnet": 1.2802,
-  "pitch": 1.0522,
-  "energy": 0.8883,
-  "duration": 0.0143
+  "status": "NOT RETAINED",
+  "figure_read": "validation total settles around 3.0 (last logged point ~3.05); see project/Results/English/validation_loss.png"
  },
- "english_ratio": 4.580357142857143,
+ "english_ratio": "figure_read: val (~3.05) is roughly 2-3x train (~1.0-1.3)",
  "sentences": {
   "English": {
    "E1": {
@@ -477,5 +469,6 @@
     "ch": 1
    }
   }
- }
+ },
+ "NOTE": "English raw loss log was not retained when the Kaggle session ended; English numbers in the report are read from the shipped loss figures. Telugu numbers are exact (reconciled against output/log/*.txt)."
 }
