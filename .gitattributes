@@ -1,7 +1,0 @@
-* text=auto eol=lf
-
-*.wav binary
-*.png binary
-*.pdf binary
-*.pth.tar binary
-*.zip binary
