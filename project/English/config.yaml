@@ -1,0 +1,90 @@
+# English FastSpeech2 - dataset, preprocessing, training and inference settings.
+#
+# common/fs2cfg.py turns this file into the three YAML files the reference
+# implementation expects (preprocess.yaml / model.yaml / train.yaml).
+
+language: English
+dataset:
+  name: Svarah
+  # Paths are relative to the repository root; absolute paths and $ENV_VARS work
+  # too.  On Kaggle `data/` is a symlink to /kaggle/working/data.
+  audio_dir: data/English/audio
+  metadata_csv: data/English/metadata.csv
+  columns: { text: text, path: file, speaker: speaker }
+
+split:
+  train_hours: 5.0
+  val_hours: 1.0
+  train_ratio: 0.8      # used when total data < train_hours + val_hours
+  seed: 1234
+  min_sec: 0.4       # shorter clips give unstable F0 / duration targets
+  max_sec: 20.0      # longer clips blow up the 1000-frame limit
+
+text:
+  cleaner: english_cleaners    # upstream cleaner: lowercase, expand numbers/abbrev.
+  language: en
+
+audio:
+  sampling_rate: 22050
+  hop_length: 256
+  win_length: 1024
+  fft_size: 1024
+  n_mel_channels: 80
+  mel_fmin: 0
+  mel_fmax: 8000
+
+pitch:
+  feature: phoneme_level      # one F0 target per phoneme (FastSpeech 2 paper)
+  normalization: true
+energy:
+  feature: phoneme_level
+  normalization: true
+
+model:
+  transformer:
+    encoder_layer: 4
+    encoder_head: 2
+    encoder_hidden: 256
+    decoder_layer: 4
+    decoder_head: 2
+    decoder_hidden: 256
+    conv_filter_size: 1024
+    conv_kernel_size: [9, 1]
+    encoder_dropout: 0.2
+    decoder_dropout: 0.2
+  variance_predictor_filter_size: 256
+  variance_predictor_kernel_size: 3
+  variance_predictor_dropout: 0.5
+  n_bins: 256
+  max_seq_len: 1000
+  # Svarah's public release carries no speaker id (paths are opaque hashes);
+  # 5 h spread over 65 districts is ~4.5 min per speaker, too thin for a speaker
+  # embedding.  Single-speaker model over the mixed pool = an "average voice".
+  multi_speaker: false
+
+train:
+  batch_size: 16
+  grad_accum_step: 2          # effective batch = 32
+  # 40k micro-steps x 16 utts = 640k samples (~175 epochs of the 5 h train
+  # split).  On 2xT4 that is ~5 h; saving every 2k steps means a session kill
+  # costs at most ~15 min of work (see RESUME_STEP in 03_train.ipynb).
+  max_steps: 40000
+  warm_up_step: 4000
+  anneal_steps: [1000000, 2000000]
+  anneal_rate: 0.3
+  log_every: 100
+  val_every: 2000
+  save_every: 2000
+
+vocoder:
+  # HiFi-GAN checkpoints ship inside the reference repo as .zip files.
+  speaker: LJSpeech           # English-trained generator
+
+inference:
+  restore_step: 0             # 0 -> use the highest step in checkpoints/
+  sentences:
+    - { id: E1,  text: "The antidisestablishmentarianism movement gained considerable momentum during the parliamentary proceedings." }
+    - { id: E2a, text: "The orchestra's conduct during the ceremony was praised by the audience." }
+    - { id: E2b, text: "The researchers will conduct an experiment to evaluate the proposed method." }
+    - { id: E3,  text: "The rhyth  m of the orchestra changed unexpectedly." }
+    - { id: E4,  text: "The meeting will start at 10:45 AM on 12 November 2026, so andaroo should arrive on time." }

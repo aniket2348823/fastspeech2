@@ -1,0 +1,57 @@
+[
+  {
+    "id": "T1",
+    "text": "న్యూరోఫార్మకోలాజికల్ పరిశోధనలో నూతన ఔషధాల ప్రభావాన్ని విశ్లేషించారు.",
+    "normalised": "న్యూరోఫార్మకోలాజికల్ పరిశోధనలో నూతన ఔషధాల ప్రభావాన్ని విశ్లేషించారు.",
+    "units": 37,
+    "wav": "/kaggle/working/sstf/project/Results/Telugu/test_generated_audios/T1.wav",
+    "wav_sec": 7.291,
+    "pred_sec": 7.291,
+    "pitch_mean_hz": 196.56,
+    "energy_mean": 32.8533
+  },
+  {
+    "id": "T2a",
+    "text": "తాడుపై అతని పట్టు చాలా బలంగా ఉంది.",
+    "normalised": "తాడుపై అతని పట్టు చాలా బలంగా ఉంది.",
+    "units": 17,
+    "wav": "/kaggle/working/sstf/project/Results/Telugu/test_generated_audios/T2a.wav",
+    "wav_sec": 3.889,
+    "pred_sec": 3.889,
+    "pitch_mean_hz": 181.67,
+    "energy_mean": 28.3478
+  },
+  {
+    "id": "T2b",
+    "text": "ఆమె పట్టు చీరను ధరించి వేడుకకు వచ్చింది.",
+    "normalised": "ఆమె పట్టు చీరను ధరించి వేడుకకు వచ్చింది.",
+    "units": 20,
+    "wav": "/kaggle/working/sstf/project/Results/Telugu/test_generated_audios/T2b.wav",
+    "wav_sec": 4.354,
+    "pred_sec": 4.354,
+    "pitch_mean_hz": 188.15,
+    "energy_mean": 25.6951
+  },
+  {
+    "id": "T3",
+    "text": "పులి అడ  విలో నిశ్శబ్దంగా నడిచింది.",
+    "normalised": "పులి అడ విలో నిశ్శబ్దంగా నడిచింది.",
+    "units": 17,
+    "wav": "/kaggle/working/sstf/project/Results/Telugu/test_generated_audios/T3.wav",
+    "wav_sec": 3.773,
+    "pred_sec": 3.773,
+    "pitch_mean_hz": 197.15,
+    "energy_mean": 27.5592
+  },
+  {
+    "id": "T4",
+    "text": "ఈ సమావేశం 2026 నవంబర్ 12వ తేదీ ఉదయం 10:45 గంటలకు ప్రారంభమవుతుంది, సమయానికి సిద్ధంగా ఉంచండి.",
+    "normalised": "ఈ సమావేశం రెండు వేల ఇరవై ఆరు నవంబర్ పన్నెండవ తేదీ ఉదయం పది నలభై ఐదు గంటలకు ప్రారంభమవుతుంది, సమయానికి సిద్ధంగా ఉంచండి.",
+    "units": 61,
+    "wav": "/kaggle/working/sstf/project/Results/Telugu/test_generated_audios/T4.wav",
+    "wav_sec": 10.995,
+    "pred_sec": 10.995,
+    "pitch_mean_hz": 195.0,
+    "energy_mean": 28.8324
+  }
+]

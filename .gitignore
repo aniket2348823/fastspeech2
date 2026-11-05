@@ -1,0 +1,29 @@
+# upstream clone is never committed
+third_party/
+/raw_data/
+/preprocessed_data/
+
+# scratch download locations (not part of the submission)
+/data/
+/telugu/
+/temp_telugu_bundle/
+sstf_code.zip
+
+# model weights: see project/README.md for the external link + checksums
+*.pth
+*.pth.tar
+*.pt
+*.ckpt
+project/*/checkpoints/*
+!project/*/checkpoints/.gitkeep
+!project/*/checkpoints/README.md
+
+# generated audio is shipped under project/Results only
+*.wav
+!project/Results/**/test_generated_audios/*.wav
+*.TextGrid
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store

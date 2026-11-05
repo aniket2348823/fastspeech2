@@ -1,0 +1,28 @@
+dataset: IndicTTS_Telugu
+path:
+  corpus_path: D:\sstf\third_party\FastSpeech2_Telugu\raw_data\IndicTTS_Telugu
+  raw_path: D:\sstf\third_party\FastSpeech2_Telugu\raw_data\IndicTTS_Telugu
+  preprocessed_path: D:\sstf\third_party\FastSpeech2_Telugu\preprocessed_data\IndicTTS_Telugu
+  lexicon_path: D:\sstf\third_party\FastSpeech2_Telugu\lexicon\librispeech-lexicon.txt
+preprocessing:
+  val_size: 0
+  text:
+    text_cleaners: []
+    language: te
+  audio:
+    sampling_rate: 22050
+    max_wav_value: 32768.0
+  stft:
+    filter_length: 1024
+    hop_length: 256
+    win_length: 1024
+  mel:
+    n_mel_channels: 80
+    mel_fmin: 0
+    mel_fmax: 8000
+  pitch:
+    feature: phoneme_level
+    normalization: true
+  energy:
+    feature: phoneme_level
+    normalization: true

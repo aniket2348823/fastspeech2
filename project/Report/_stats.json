@@ -1,0 +1,481 @@
+{
+ "telugu_train": {
+  "n": 400,
+  "first": 14.9002,
+  "last": 0.8352,
+  "min": 0.8309,
+  "min_step": 39400,
+  "step1000": 4.8477,
+  "step5000": 1.7566,
+  "step10000": 1.3398,
+  "step20000": 0.9595,
+  "step30000": 0.8965,
+  "last10_mean": 0.88139,
+  "last10_std": 0.03353939325628894,
+  "below2": 4200,
+  "below1": 18200
+ },
+ "telugu_val": {
+  "n": 20,
+  "first": 4.3065,
+  "last": 4.5053,
+  "min": 4.3065,
+  "min_step": 2000,
+  "max": 4.5191,
+  "rise": 0.1988000000000003
+ },
+ "telugu_components": {
+  "Total Loss": 0.8352,
+  "Mel Loss": 0.4034,
+  "Mel PostNet Loss": 0.4012,
+  "Pitch Loss": 0.0136,
+  "Energy Loss": 0.0132,
+  "Duration Loss": 0.0038
+ },
+ "telugu_val_components": {
+  "Total Loss": 4.5053,
+  "Mel Loss": 1.2778,
+  "Mel PostNet Loss": 1.2784,
+  "Pitch Loss": 1.058,
+  "Energy Loss": 0.8763,
+  "Duration Loss": 0.0148
+ },
+ "telugu_ratio": 5.3942768199233715,
+ "telugu_component_ratio": {
+  "Total Loss": 5.39,
+  "Mel Loss": 3.17,
+  "Mel PostNet Loss": 3.19,
+  "Pitch Loss": 77.79,
+  "Energy Loss": 66.39,
+  "Duration Loss": 3.89
+ },
+ "english_train_end": {
+  "total": 0.9856,
+  "mel": 0.3997,
+  "postnet": 0.398,
+  "pitch": 0.1656,
+  "energy": 0.0141,
+  "duration": 0.0082
+ },
+ "english_val_end": {
+  "total": 4.5144,
+  "mel": 1.2794,
+  "postnet": 1.2802,
+  "pitch": 1.0522,
+  "energy": 0.8883,
+  "duration": 0.0143
+ },
+ "english_ratio": 4.580357142857143,
+ "sentences": {
+  "English": {
+   "E1": {
+    "units": 85,
+    "dur_total": 7.873,
+    "dur_mean_ms": 92.6,
+    "dur_min_ms": 81.3,
+    "dur_max_ms": 116.1,
+    "dur_cv": 0.12,
+    "pitch_mean": 184.0,
+    "pitch_min": 112.2,
+    "pitch_max": 260.5,
+    "pitch_std": 36.0,
+    "pitch_first": 164.9,
+    "pitch_last": 112.2,
+    "energy_mean": 27.75,
+    "energy_min": 1.99,
+    "energy_max": 65.74,
+    "energy_std": 14.57,
+    "energy_first": 6.94,
+    "energy_last": 1.99,
+    "longest": [
+     [
+      "DH",
+      "10"
+     ],
+     [
+      "AH0",
+      "10"
+     ],
+     [
+      "D",
+      "10"
+     ]
+    ],
+    "shortest": "AH"
+   },
+   "E2a": {
+    "units": 50,
+    "dur_total": 6.095,
+    "dur_mean_ms": 121.9,
+    "dur_min_ms": 92.9,
+    "dur_max_ms": 174.1,
+    "dur_cv": 0.17,
+    "pitch_mean": 158.7,
+    "pitch_min": 109.6,
+    "pitch_max": 234.7,
+    "pitch_std": 29.9,
+    "pitch_first": 112.4,
+    "pitch_last": 137.3,
+    "energy_mean": 14.59,
+    "energy_min": 0.97,
+    "energy_max": 28.77,
+    "energy_std": 7.2,
+    "energy_first": 11.2,
+    "energy_last": 0.97,
+    "longest": [
+     [
+      "DH",
+      "15"
+     ],
+     [
+      "AH0",
+      "15"
+     ],
+     [
+      "NG",
+      "14"
+     ]
+    ],
+    "shortest": "K"
+   },
+   "E2b": {
+    "units": 56,
+    "dur_total": 5.063,
+    "dur_mean_ms": 90.4,
+    "dur_min_ms": 69.7,
+    "dur_max_ms": 139.3,
+    "dur_cv": 0.2,
+    "pitch_mean": 135.9,
+    "pitch_min": 101.7,
+    "pitch_max": 152.7,
+    "pitch_std": 10.7,
+    "pitch_first": 128.1,
+    "pitch_last": 101.7,
+    "energy_mean": 17.96,
+    "energy_min": 2.13,
+    "energy_max": 41.3,
+    "energy_std": 10.09,
+    "energy_first": 8.87,
+    "energy_last": 2.13,
+    "longest": [
+     [
+      "DH",
+      "12"
+     ],
+     [
+      "AH0",
+      "12"
+     ],
+     [
+      "S",
+      "11"
+     ]
+    ],
+    "shortest": "S"
+   },
+   "E3": {
+    "units": 39,
+    "dur_total": 3.484,
+    "dur_mean_ms": 89.3,
+    "dur_min_ms": 69.7,
+    "dur_max_ms": 127.7,
+    "dur_cv": 0.15,
+    "pitch_mean": 149.3,
+    "pitch_min": 112.5,
+    "pitch_max": 201.0,
+    "pitch_std": 23.6,
+    "pitch_first": 130.9,
+    "pitch_last": 153.9,
+    "energy_mean": 14.49,
+    "energy_min": 1.87,
+    "energy_max": 46.1,
+    "energy_std": 9.82,
+    "energy_first": 1.87,
+    "energy_last": 3.24,
+    "longest": [
+     [
+      "DH",
+      "11"
+     ],
+     [
+      "AH0",
+      "11"
+     ],
+     [
+      "DH",
+      "10"
+     ]
+    ],
+    "shortest": "AH0"
+   },
+   "E4": {
+    "units": 85,
+    "dur_total": 9.184,
+    "dur_mean_ms": 108.0,
+    "dur_min_ms": 81.3,
+    "dur_max_ms": 174.1,
+    "dur_cv": 0.16,
+    "pitch_mean": 186.9,
+    "pitch_min": 109.5,
+    "pitch_max": 255.2,
+    "pitch_std": 35.3,
+    "pitch_first": 109.5,
+    "pitch_last": 245.2,
+    "energy_mean": 24.09,
+    "energy_min": 2.43,
+    "energy_max": 64.91,
+    "energy_std": 12.74,
+    "energy_first": 18.01,
+    "energy_last": 11.27,
+    "longest": [
+     [
+      "UH1",
+      "15"
+     ],
+     [
+      "SH",
+      "14"
+     ],
+     [
+      "D",
+      "14"
+     ]
+    ],
+    "shortest": "EH"
+   }
+  },
+  "Telugu": {
+   "T1": {
+    "units": 37,
+    "dur_total": 7.291,
+    "dur_mean_ms": 197.0,
+    "dur_min_ms": 81.3,
+    "dur_max_ms": 325.1,
+    "dur_cv": 0.38,
+    "pitch_mean": 196.6,
+    "pitch_min": 120.1,
+    "pitch_max": 270.1,
+    "pitch_std": 37.9,
+    "pitch_first": 144.0,
+    "pitch_last": 122.8,
+    "energy_mean": 32.85,
+    "energy_min": 0.2,
+    "energy_max": 72.63,
+    "energy_std": 17.04,
+    "energy_first": 0.2,
+    "energy_last": 0.63,
+    "longest": [
+     [
+      "shoo",
+      "28"
+     ],
+     [
+      "dhaa",
+      "28"
+     ],
+     [
+      "bhaa",
+      "28"
+     ]
+    ],
+    "shortest": "n"
+   },
+   "T2a": {
+    "units": 17,
+    "dur_total": 3.89,
+    "dur_mean_ms": 228.8,
+    "dur_min_ms": 104.5,
+    "dur_max_ms": 418.0,
+    "dur_cv": 0.37,
+    "pitch_mean": 181.7,
+    "pitch_min": 98.9,
+    "pitch_max": 246.4,
+    "pitch_std": 46.6,
+    "pitch_first": 187.2,
+    "pitch_last": 100.8,
+    "energy_mean": 28.35,
+    "energy_min": 0.18,
+    "energy_max": 59.15,
+    "energy_std": 18.92,
+    "energy_first": 0.18,
+    "energy_last": 0.42,
+    "longest": [
+     [
+      "chaa",
+      "36"
+     ],
+     [
+      "taa",
+      "28"
+     ],
+     [
+      "pai",
+      "28"
+     ]
+    ],
+    "shortest": "a"
+   },
+   "T2b": {
+    "units": 20,
+    "dur_total": 4.354,
+    "dur_mean_ms": 217.7,
+    "dur_min_ms": 92.9,
+    "dur_max_ms": 371.5,
+    "dur_cv": 0.34,
+    "pitch_mean": 188.2,
+    "pitch_min": 115.0,
+    "pitch_max": 252.6,
+    "pitch_std": 34.4,
+    "pitch_first": 178.5,
+    "pitch_last": 120.7,
+    "energy_mean": 25.7,
+    "energy_min": -0.14,
+    "energy_max": 62.84,
+    "energy_std": 18.86,
+    "energy_first": 2.63,
+    "energy_last": 0.53,
+    "longest": [
+     [
+      "chii",
+      "32"
+     ],
+     [
+      "chin",
+      "32"
+     ],
+     [
+      "dha",
+      "25"
+     ]
+    ],
+    "shortest": "t"
+   },
+   "T3": {
+    "units": 17,
+    "dur_total": 3.774,
+    "dur_mean_ms": 222.0,
+    "dur_min_ms": 104.5,
+    "dur_max_ms": 418.0,
+    "dur_cv": 0.36,
+    "pitch_mean": 197.2,
+    "pitch_min": 116.5,
+    "pitch_max": 247.4,
+    "pitch_std": 41.9,
+    "pitch_first": 206.1,
+    "pitch_last": 116.5,
+    "energy_mean": 27.56,
+    "energy_min": 0.12,
+    "energy_max": 62.0,
+    "energy_std": 20.27,
+    "energy_first": 0.21,
+    "energy_last": 0.61,
+    "longest": [
+     [
+      "chin",
+      "36"
+     ],
+     [
+      "sha",
+      "28"
+     ],
+     [
+      "loo",
+      "27"
+     ]
+    ],
+    "shortest": "a"
+   },
+   "T4": {
+    "units": 61,
+    "dur_total": 10.993,
+    "dur_mean_ms": 180.2,
+    "dur_min_ms": 81.3,
+    "dur_max_ms": 313.5,
+    "dur_cv": 0.3,
+    "pitch_mean": 195.0,
+    "pitch_min": 88.9,
+    "pitch_max": 265.4,
+    "pitch_std": 38.2,
+    "pitch_first": 206.9,
+    "pitch_last": 94.1,
+    "energy_mean": 28.83,
+    "energy_min": 0.13,
+    "energy_max": 54.84,
+    "energy_std": 13.99,
+    "energy_first": 0.26,
+    "energy_last": 0.73,
+    "longest": [
+     [
+      "bhai",
+      "27"
+     ],
+     [
+      "tun",
+      "23"
+     ],
+     [
+      "maa",
+      "22"
+     ]
+    ],
+    "shortest": "i"
+   }
+  }
+ },
+ "audio": {
+  "English": {
+   "E1": {
+    "sec": 7.872,
+    "sr": 22050,
+    "ch": 1
+   },
+   "E2a": {
+    "sec": 6.095,
+    "sr": 22050,
+    "ch": 1
+   },
+   "E2b": {
+    "sec": 5.062,
+    "sr": 22050,
+    "ch": 1
+   },
+   "E3": {
+    "sec": 3.483,
+    "sr": 22050,
+    "ch": 1
+   },
+   "E4": {
+    "sec": 9.183,
+    "sr": 22050,
+    "ch": 1
+   }
+  },
+  "Telugu": {
+   "T1": {
+    "sec": 7.291,
+    "sr": 22050,
+    "ch": 1
+   },
+   "T2a": {
+    "sec": 3.889,
+    "sr": 22050,
+    "ch": 1
+   },
+   "T2b": {
+    "sec": 4.354,
+    "sr": 22050,
+    "ch": 1
+   },
+   "T3": {
+    "sec": 3.773,
+    "sr": 22050,
+    "ch": 1
+   },
+   "T4": {
+    "sec": 10.995,
+    "sr": 22050,
+    "ch": 1
+   }
+  }
+ }
+}

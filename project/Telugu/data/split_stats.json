@@ -1,0 +1,23 @@
+{
+  "language": "Telugu",
+  "metadata_csv": "/kaggle/working/sstf/data/Telugu/metadata.csv",
+  "audio_dir": "/kaggle/working/sstf/data/Telugu/audio",
+  "pool_size": 8576,
+  "usable": 6340,
+  "dropped": {
+    "missing_audio": 0,
+    "out_of_range": 2236,
+    "empty_text": 0
+  },
+  "train_utts": 1907,
+  "val_utts": 373,
+  "train_hours": 5.002,
+  "val_hours": 1.0,
+  "train_speakers": 2,
+  "mean_utt_sec": 9.48,
+  "seed": 1234,
+  "min_sec": 0.4,
+  "max_sec": 20.0,
+  "policy": "drop out-of-range, global seeded shuffle, greedy fill to hour budget",
+  "overlap": 0
+}

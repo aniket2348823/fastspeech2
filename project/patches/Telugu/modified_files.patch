@@ -1,0 +1,241 @@
+diff --git a/audio/audio_processing.py b/audio/audio_processing.py
+index 07bef28..87d4214 100644
+--- a/audio/audio_processing.py
++++ b/audio/audio_processing.py
+@@ -54,7 +54,13 @@ def window_sumsquare(
+     # Compute the squared window at the desired length
+     win_sq = get_window(window, win_length, fftbins=True)
+     win_sq = librosa_util.normalize(win_sq, norm=norm) ** 2
+-    win_sq = librosa_util.pad_center(win_sq, n_fft)
++    win_sq = np.pad(
++        win_sq,
++        (
++            (n_fft - len(win_sq)) // 2,
++            n_fft - len(win_sq) - (n_fft - len(win_sq)) // 2,
++        ),
++    )
+ 
+     # Fill the envelope
+     for i in range(n_frames):
+diff --git a/audio/stft.py b/audio/stft.py
+index fcce29b..9c4982c 100644
+--- a/audio/stft.py
++++ b/audio/stft.py
+@@ -1,4 +1,4 @@
+-import torch
++﻿import torch
+ import torch.nn.functional as F
+ import numpy as np
+ from scipy.signal import get_window
+@@ -39,7 +39,8 @@ class STFT(torch.nn.Module):
+             assert filter_length >= win_length
+             # get window and zero center pad it to filter_length
+             fft_window = get_window(window, win_length, fftbins=True)
+-            fft_window = pad_center(fft_window, filter_length)
++            fft_window = np.pad(fft_window, ((filter_length - len(fft_window)) // 2, filter_length - len(fft_window) - (filter_length - len(fft_window)) // 2))
++
+             fft_window = torch.from_numpy(fft_window).float()
+ 
+             # window the bases
+@@ -65,8 +66,8 @@ class STFT(torch.nn.Module):
+         input_data = input_data.squeeze(1)
+ 
+         forward_transform = F.conv1d(
+-            input_data.cuda(),
+-            torch.autograd.Variable(self.forward_basis, requires_grad=False).cuda(),
++            input_data.to(self.forward_basis.device),
++            self.forward_basis.to(input_data.device),
+             stride=self.hop_length,
+             padding=0,
+         ).cpu()
+@@ -87,7 +88,7 @@ class STFT(torch.nn.Module):
+ 
+         inverse_transform = F.conv_transpose1d(
+             recombine_magnitude_phase,
+-            torch.autograd.Variable(self.inverse_basis, requires_grad=False),
++            self.inverse_basis.to(recombine_magnitude_phase.device),
+             stride=self.hop_length,
+             padding=0,
+         )
+@@ -108,7 +109,7 @@ class STFT(torch.nn.Module):
+             window_sum = torch.autograd.Variable(
+                 torch.from_numpy(window_sum), requires_grad=False
+             )
+-            window_sum = window_sum.cuda() if magnitude.is_cuda else window_sum
++            window_sum = window_sum.to(magnitude.device)
+             inverse_transform[:, :, approx_nonzero_indices] /= window_sum[
+                 approx_nonzero_indices
+             ]
+@@ -142,9 +143,7 @@ class TacotronSTFT(torch.nn.Module):
+         self.n_mel_channels = n_mel_channels
+         self.sampling_rate = sampling_rate
+         self.stft_fn = STFT(filter_length, hop_length, win_length)
+-        mel_basis = librosa_mel_fn(
+-            sampling_rate, filter_length, n_mel_channels, mel_fmin, mel_fmax
+-        )
++        mel_basis = librosa_mel_fn(sr=sampling_rate, n_fft=filter_length, n_mels=n_mel_channels, fmin=mel_fmin, fmax=mel_fmax)
+         mel_basis = torch.from_numpy(mel_basis).float()
+         self.register_buffer("mel_basis", mel_basis)
+ 
+diff --git a/dataset.py b/dataset.py
+index 011ba34..ba13408 100644
+--- a/dataset.py
++++ b/dataset.py
+@@ -40,19 +40,19 @@ class Dataset(Dataset):
+             "mel",
+             "{}-mel-{}.npy".format(speaker, basename),
+         )
+-        mel = np.load(mel_path)
++        mel = np.load(mel_path).astype(np.float32)
+         pitch_path = os.path.join(
+             self.preprocessed_path,
+             "pitch",
+             "{}-pitch-{}.npy".format(speaker, basename),
+         )
+-        pitch = np.load(pitch_path)
++        pitch = np.load(pitch_path).astype(np.float32)
+         energy_path = os.path.join(
+             self.preprocessed_path,
+             "energy",
+             "{}-energy-{}.npy".format(speaker, basename),
+         )
+-        energy = np.load(energy_path)
++        energy = np.load(energy_path).astype(np.float32)
+         duration_path = os.path.join(
+             self.preprocessed_path,
+             "duration",
+diff --git a/preprocessor/preprocessor.py b/preprocessor/preprocessor.py
+index 0c2c118..2fc9a8d 100644
+--- a/preprocessor/preprocessor.py
++++ b/preprocessor/preprocessor.py
+@@ -1,4 +1,4 @@
+-import os
++﻿import os
+ import random
+ import json
+ 
+@@ -175,7 +175,7 @@ class Preprocessor:
+         ].astype(np.float32)
+ 
+         # Read raw text
+-        with open(text_path, "r") as f:
++        with open(text_path, "r", encoding="utf-8") as f:
+             raw_text = f.readline().strip("\n")
+ 
+         # Compute fundamental frequency
+@@ -209,33 +209,53 @@ class Preprocessor:
+             # Phoneme-level average
+             pos = 0
+             for i, d in enumerate(duration):
++                if i >= len(pitch):
++                    break
+                 if d > 0:
+-                    pitch[i] = np.mean(pitch[pos : pos + d])
++                    end = min(pos + d, len(pitch))
++                    if end > pos:
++                        pitch[i] = np.mean(pitch[pos:end])
++                    else:
++                        pitch[i] = 0
+                 else:
+                     pitch[i] = 0
+                 pos += d
++            if len(pitch) < len(duration):
++                pitch = np.pad(pitch, (0, len(duration) - len(pitch)))
+             pitch = pitch[: len(duration)]
+ 
+         if self.energy_phoneme_averaging:
+             # Phoneme-level average
+             pos = 0
+             for i, d in enumerate(duration):
++                if i >= len(energy):
++                    break
+                 if d > 0:
+-                    energy[i] = np.mean(energy[pos : pos + d])
++                    end = min(pos + d, len(energy))
++                    if end > pos:
++                        energy[i] = np.mean(energy[pos:end])
++                    else:
++                        energy[i] = 0
+                 else:
+                     energy[i] = 0
+                 pos += d
++            if len(energy) < len(duration):
++                energy = np.pad(energy, (0, len(duration) - len(energy)))
+             energy = energy[: len(duration)]
+ 
++        # SSTF: phones and frames must describe the same audio
++        if len(duration) == 0 or int(np.sum(duration)) != mel_spectrogram.shape[1]:
++            return None
++
+         # Save files
+         dur_filename = "{}-duration-{}.npy".format(speaker, basename)
+         np.save(os.path.join(self.out_dir, "duration", dur_filename), duration)
+ 
+         pitch_filename = "{}-pitch-{}.npy".format(speaker, basename)
+-        np.save(os.path.join(self.out_dir, "pitch", pitch_filename), pitch)
++        np.save(os.path.join(self.out_dir, "pitch", pitch_filename), np.asarray(pitch, dtype=np.float32))
+ 
+         energy_filename = "{}-energy-{}.npy".format(speaker, basename)
+-        np.save(os.path.join(self.out_dir, "energy", energy_filename), energy)
++        np.save(os.path.join(self.out_dir, "energy", energy_filename), np.asarray(energy, dtype=np.float32))
+ 
+         mel_filename = "{}-mel-{}.npy".format(speaker, basename)
+         np.save(
+diff --git a/text/symbols.py b/text/symbols.py
+index ae99253..1f07d47 100644
+--- a/text/symbols.py
++++ b/text/symbols.py
+@@ -27,3 +27,9 @@ symbols = (
+     + _pinyin
+     + _silences
+ )
++
++# --- SSTF PATCH BEGIN (telugu graphemes) ---
++_telugu_units = ["ఀ", "ఁ", "ం", "ః", "ఄ", "అ", "ఆ", "ఇ", "ఈ", "ఉ", "ఊ", "ఋ", "ఌ", "ఎ", "ఏ", "ఐ", "ఒ", "ఓ", "ఔ", "క", "ఖ", "గ", "ఘ", "ఙ", "చ", "ఛ", "జ", "ఝ", "ఞ", "ట", "ఠ", "డ", "ఢ", "ణ", "త", "థ", "ద", "ధ", "న", "ప", "ఫ", "బ", "భ", "మ", "య", "ర", "ఱ", "ల", "ళ", "ఴ", "వ", "శ", "ష", "స", "హ", "఼", "ఽ", "ా", "ి", "ీ", "ు", "ూ", "ృ", "ౄ", "ె", "ే", "ై", "ొ", "ో", "ౌ", "్", "ౕ", "ౖ", "ౘ", "ౙ", "ౚ", "ౝ", "ౠ", "ౡ", "ౢ", "ౣ", "౷", "౿", "అం", "ఆం", "ఇం", "ఉం", "ఎం", "ఏం", "ఐం", "ఒం", "ఓం", "కం", "కా", "కాం", "కి", "కిం", "కీ", "కు", "కుం", "కూ", "కూం", "కృ", "కె", "కెం", "కే", "కేం", "కై", "కైం", "కొ", "కొం", "కో", "కోం", "కౌ", "కౌం", "క్", "ఖం", "ఖా", "ఖి", "ఖిం", "ఖీ", "ఖు", "ఖూ", "ఖే", "ఖై", "ఖో", "ఖౌ", "ఖ్", "గం", "గా", "గాం", "గాః", "గి", "గిం", "గీ", "గీం", "గు", "గుం", "గూ", "గృ", "గె", "గెం", "గే", "గేం", "గై", "గొ", "గొం", "గో", "గౌ", "గ్", "ఘం", "ఘా", "ఘాం", "ఘి", "ఘిం", "ఘీ", "ఘీం", "ఘు", "ఘుం", "ఘూ", "ఘృ", "ఘే", "ఘై", "ఘో", "ఘౌ", "ఘ్", "ఙ్", "చం", "చా", "చాం", "చి", "చిం", "చీ", "చీం", "చు", "చుం", "చూ", "చె", "చెం", "చే", "చేం", "చై", "చొ", "చో", "చోం", "చౌ", "చ్", "ఛం", "ఛా", "ఛాం", "ఛీ", "ఛు", "ఛూ", "ఛే", "ఛై", "ఛో", "ఛ్", "జం", "జా", "జాం", "జి", "జిం", "జీ", "జు", "జుం", "జూ", "జృం", "జె", "జెం", "జే", "జేం", "జై", "జొ", "జో", "జౌ", "జ్", "ఝా", "ఝి", "ఝు", "ఝే", "ఝో", "ఞం", "ఞా", "ఞు", "టం", "టా", "టాం", "టి", "టిం", "టీ", "టు", "టుం", "టూ", "టూం", "టృ", "టె", "టెం", "టే", "టేం", "టై", "టైం", "టొ", "టో", "టోం", "టౌ", "ట్", "ఠం", "ఠా", "ఠి", "ఠిం", "ఠీ", "ఠు", "ఠో", "డం", "డా", "డాం", "డి", "డిం", "డీ", "డు", "డుం", "డూ", "డె", "డెం", "డే", "డేం", "డై", "డొ", "డొం", "డో", "డౌ", "డ్", "ఢం", "ఢా", "ఢాం", "ఢి", "ఢీ", "ఢు", "ఢె", "ఢై", "ఢో", "ఢ్", "ణం", "ణా", "ణాం", "ణి", "ణిం", "ణీ", "ణు", "ణుం", "ణె", "ణెం", "ణే", "ణై", "ణొ", "ణో", "ణ్", "తం", "తః", "తా", "తాం", "తి", "తిం", "తీ", "తు", "తుం", "తూ", "తూం", "తృ", "తె", "తెం", "తే", "తేం", "తై", "తైం", "తొ", "తొం", "తో", "తోం", "తౌ", "తౌం", "త్", "థం", "థా", "థి", "థిం", "థు", "థూ", "థృ", "థె", "థే", "థై", "థో", "థ్", "దం", "దా", "దాం", "ది", "దిం", "దీ", "దీం", "దు", "దుం", "దుః", "దూ", "దృ", "దె", "దెం", "దే", "దేం", "దై", "దైం", "దొ", "దొం", "దో", "దౌ", "ద్", "ధం", "ధా", "ధాం", "ధి", "ధిం", "ధీ", "ధు", "ధుం", "ధుః", "ధూ", "ధృ", "ధె", "ధే", "ధై", "ధో", "ధౌ", "ధ్", "నం", "నః", "నా", "నాం", "ని", "నిం", "నీ", "ను", "నుం", "నూ", "నృ", "నె", "నెం", "నే", "నేం", "నై", "నైం", "నొ", "నో", "నౌ", "న్", "పం", "పా", "పాం", "పి", "పిం", "పీ", "పు", "పుం", "పూ", "పృ", "పె", "పెం", "పే", "పేం", "పై", "పైం", "పొ", "పొం", "పో", "పోం", "పౌ", "ప్", "ఫా", "ఫి", "ఫీ", "ఫు", "ఫూ", "ఫె", "ఫే", "ఫై", "ఫొ", "ఫో", "ఫౌ", "ఫౌం", "ఫ్", "బం", "బా", "బాం", "బి", "బిం", "బీ", "బు", "బుం", "బూ", "బృ", "బృం", "బె", "బెం", "బే", "బేం", "బై", "బొ", "బొం", "బో", "బౌ", "బ్", "భం", "భా", "భాం", "భి", "భిం", "భీ", "భు", "భూ", "భృ", "భె", "భే", "భై", "భైం", "భో", "భోం", "భౌ", "భ్", "మం", "మా", "మాం", "మి", "మిం", "మీ", "మీం", "ము", "ముం", "మూ", "మృ", "మె", "మెం", "మే", "మేం", "మై", "మైం", "మొ", "మొం", "మో", "మౌ", "మౌం", "మ్", "యం", "యః", "యా", "యాం", "యాః", "యి", "యిం", "యీ", "యు", "యుం", "యూ", "యె", "యెం", "యే", "యేం", "యై", "యొ", "యో", "యౌ", "య్", "రం", "రా", "రాం", "రి", "రిం", "రీ", "రీం", "రు", "రుం", "రూ", "రె", "రెం", "రే", "రేం", "రై", "రైం", "రొ", "రొం", "రో", "రౌ", "రౌం", "ర్", "ఱం", "ఱా", "ఱాం", "ఱి", "ఱు", "ఱ్", "లం", "లా", "లాం", "లాః", "లి", "లిం", "లీ", "లీం", "లు", "లుం", "లూ", "లె", "లెం", "లే", "లేం", "లై", "లైం", "లొ", "లొం", "లో", "లోం", "లౌ", "ల్", "ళం", "ళా", "ళాం", "ళి", "ళిం", "ళీ", "ళు", "ళుం", "ళూ", "ళె", "ళెం", "ళే", "ళేం", "ళై", "ళొ", "ళో", "ళ్", "వం", "వా", "వాం", "వాః", "వి", "విం", "వీ", "వీం", "వు", "వుం", "వూ", "వూం", "వృ", "వె", "వెం", "వే", "వేం", "వై", "వైం", "వొ", "వొం", "వో", "వౌ", "వ్", "శం", "శా", "శాం", "శి", "శిం", "శీ", "శు", "శుం", "శూ", "శృ", "శృం", "శె", "శే", "శై", "శొ", "శో", "శౌ", "శ్", "షం", "షా", "షి", "షిం", "షీ", "షు", "షూ", "షె", "షే", "షై", "షొ", "షో", "షౌ", "ష్", "సం", "సః", "సా", "సాం", "సి", "సిం", "సీ", "సు", "సుం", "సూ", "సృ", "సె", "సెం", "సే", "సేం", "సై", "సొ", "సొం", "సో", "సోం", "సౌ", "సౌం", "స్", "హం", "హా", "హాం", "హి", "హిం", "హీ", "హు", "హుం", "హూ", "హూం", "హృ", "హె", "హెం", "హే", "హేం", "హై", "హొ", "హో", "హోం", "హౌ", "హ్", ".", ",", "?", "!", "-"]
++_telugu_symbols = ["@" + u for u in _telugu_units]
++symbols = symbols + [s for s in _telugu_symbols if s not in symbols]
++# --- SSTF PATCH END (telugu graphemes) ---
+diff --git a/utils/model.py b/utils/model.py
+index 45e1f41..550210d 100644
+--- a/utils/model.py
++++ b/utils/model.py
+@@ -17,7 +17,7 @@ def get_model(args, configs, device, train=False):
+             train_config["path"]["ckpt_path"],
+             "{}.pth.tar".format(args.restore_step),
+         )
+-        ckpt = torch.load(ckpt_path)
++        ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
+         model.load_state_dict(ckpt["model"])
+ 
+     if train:
+@@ -60,9 +60,9 @@ def get_vocoder(config, device):
+         config = hifigan.AttrDict(config)
+         vocoder = hifigan.Generator(config)
+         if speaker == "LJSpeech":
+-            ckpt = torch.load("hifigan/generator_LJSpeech.pth.tar")
++            ckpt = torch.load("hifigan/generator_LJSpeech.pth.tar", map_location=device, weights_only=False)
+         elif speaker == "universal":
+-            ckpt = torch.load("hifigan/generator_universal.pth.tar")
++            ckpt = torch.load("hifigan/generator_universal.pth.tar", map_location=device, weights_only=False)
+         vocoder.load_state_dict(ckpt["generator"])
+         vocoder.eval()
+         vocoder.remove_weight_norm()
+@@ -90,3 +90,5 @@ def vocoder_infer(mels, vocoder, model_config, preprocess_config, lengths=None):
+             wavs[i] = wavs[i][: lengths[i]]
+ 
+     return wavs
++
++# SSTF: torch>=2.6 compat: weights_only=False on torch.load
+diff --git a/utils/tools.py b/utils/tools.py
+index f897430..3075693 100644
+--- a/utils/tools.py
++++ b/utils/tools.py
+@@ -38,7 +38,7 @@ def to_device(data, device):
+         mels = torch.from_numpy(mels).float().to(device)
+         mel_lens = torch.from_numpy(mel_lens).to(device)
+         pitches = torch.from_numpy(pitches).float().to(device)
+-        energies = torch.from_numpy(energies).to(device)
++        energies = torch.from_numpy(energies).float().to(device)
+         durations = torch.from_numpy(durations).long().to(device)
+ 
+         return (

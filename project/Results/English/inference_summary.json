@@ -1,0 +1,57 @@
+[
+  {
+    "id": "E1",
+    "text": "The antidisestablishmentarianism movement gained considerable momentum during the parliamentary proceedings.",
+    "normalised": "The antidisestablishmentarianism movement gained considerable momentum during the parliamentary proceedings.",
+    "units": 85,
+    "wav": "/kaggle/working/sstf/project/Results/English/test_generated_audios/E1.wav",
+    "wav_sec": 7.872,
+    "pred_sec": 7.872,
+    "pitch_mean_hz": 184.02,
+    "energy_mean": 27.7519
+  },
+  {
+    "id": "E2a",
+    "text": "The orchestra's conduct during the ceremony was praised by the audience.",
+    "normalised": "The orchestra's conduct during the ceremony was praised by the audience.",
+    "units": 50,
+    "wav": "/kaggle/working/sstf/project/Results/English/test_generated_audios/E2a.wav",
+    "wav_sec": 6.095,
+    "pred_sec": 6.095,
+    "pitch_mean_hz": 158.66,
+    "energy_mean": 14.5904
+  },
+  {
+    "id": "E2b",
+    "text": "The researchers will conduct an experiment to evaluate the proposed method.",
+    "normalised": "The researchers will conduct an experiment to evaluate the proposed method.",
+    "units": 56,
+    "wav": "/kaggle/working/sstf/project/Results/English/test_generated_audios/E2b.wav",
+    "wav_sec": 5.062,
+    "pred_sec": 5.062,
+    "pitch_mean_hz": 135.91,
+    "energy_mean": 17.9592
+  },
+  {
+    "id": "E3",
+    "text": "The rhyth  m of the orchestra changed unexpectedly.",
+    "normalised": "The rhyth m of the orchestra changed unexpectedly.",
+    "units": 39,
+    "wav": "/kaggle/working/sstf/project/Results/English/test_generated_audios/E3.wav",
+    "wav_sec": 3.483,
+    "pred_sec": 3.483,
+    "pitch_mean_hz": 149.3,
+    "energy_mean": 14.4853
+  },
+  {
+    "id": "E4",
+    "text": "The meeting will start at 10:45 AM on 12 November 2026, so andaroo should arrive on time.",
+    "normalised": "The meeting will start at ten forty-five A M on the twelfth of November twenty twenty-six, so andaroo should arrive on time.",
+    "units": 85,
+    "wav": "/kaggle/working/sstf/project/Results/English/test_generated_audios/E4.wav",
+    "wav_sec": 9.183,
+    "pred_sec": 9.183,
+    "pitch_mean_hz": 186.94,
+    "energy_mean": 24.0876
+  }
+]
