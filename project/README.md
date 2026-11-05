@@ -13,13 +13,13 @@ project/
 │   ├── train.py  preprocess.py  inference.py  config.yaml
 │   ├── checkpoints/40000.pth.tar          trained English model
 │   ├── fs2_config/                        rendered preprocess/model/train YAML for the reference
-│   └── output/log/{train,val}/log.txt     raw loss logs (source of every number in the report)
+│   └── output/                            (empty: the English loss log was not retained)
 ├── Telugu/
 │   ├── train.py  preprocess.py  inference.py  config.yaml
 │   ├── checkpoints/40000.pth.tar          trained Telugu model
 │   ├── data/{vocab.json,train.txt,val.txt,split_stats.json}
 │   ├── fs2_config/
-│   └── output/log/{train,val}/log.txt
+│   └── output/log/{train,val}/log.txt     raw loss logs (all Telugu numbers come from here)
 ├── Results/
 │   ├── English/
 │   │   ├── training_loss.png  validation_loss.png
